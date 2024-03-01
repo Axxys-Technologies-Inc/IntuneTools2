@@ -1824,6 +1824,17 @@ $whitelistapps = @(
     "Teams Machine-Wide Installer"
     "Microsoft OneDrive"
     "@C:\WINDOWS\System32\mstsc.exe,-4000"
+    "Halcyon AR"
+    "WatchGuard Mobile VPN with SSL client 12.10"
+    "Sophos Management Communications System"
+    "ScreenConnect Client (a91a12555ca17441)"
+    "CYRISMA Sensor version 2.5"
+    "LogMeIn Client"
+    "Sophos Health"
+    "ConnectWise Automate Remote Agent"
+    "Adobe Refresh Manager"
+    "Adobe Acrobat 2020"
+    "LogMeIn"
 )
 
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
