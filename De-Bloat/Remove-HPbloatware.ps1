@@ -118,6 +118,11 @@ Try {
     MsiExec /x "{4DA839F0-72CF-11EC-B247-3863BB3CB5A8}" /qn /norestart
     Write-Host -Object "Fallback to MSI uninistall for HP Wolf 2 Security initiated"
 }
+# Fallback attempt 3 to remove HP Wolf Security using msiexec
+Try {
+    MsiExec.exe /X "{2A23BD00-9533-11EE-9C02-3863BB3CB5A8}" /qn /norestart
+    Write-Host -Object "Fallback to MSI uninistall for HP Wolf 2 Security initiated"
+}
 Catch {
     Write-Warning -Object  "Failed to uninstall HP Wolf Security 2 using MSI - Error message: $($_.Exception.Message)"
 }
