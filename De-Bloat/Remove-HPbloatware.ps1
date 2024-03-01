@@ -126,6 +126,49 @@ Try {
 Catch {
     Write-Warning -Object  "Failed to uninstall HP Wolf Security 2 using MSI - Error message: $($_.Exception.Message)"
 }
+Try {
+    MsiExec.exe /X "{2A23BD00-9533-11EE-9C02-3863BB3CB5A8}" /qn /norestart
+    Write-Host -Object "Fallback to MSI uninistall for HP Wolf 3 Security initiated"
+}
+
+Catch {
+    Write-Warning -Object  "Failed to uninstall HP Wolf Security 3 using MSI - Error message: $($_.Exception.Message)"
+}
+
+Try {
+    MsiExec.exe /X "{2439AE5C-1F6E-4AD4-A403-D1BD8C6945B4}" /qn /norestart
+    Write-Host -Object "Fallback to MSI uninistall for HP Wolf 4 Security initiated"
+}
+
+Catch {
+    Write-Warning -Object  "Failed to uninstall HP Wolf Security 4 using MSI - Error message: $($_.Exception.Message)"
+}
+Try {
+    MsiExec.exe /X "{827A208E-A87A-44F2-A8AB-AB86A9445794}" /qn /norestart
+    Write-Host -Object "Fallback to MSI uninistall for HP Wolf 5 Security initiated"
+}
+
+Catch {
+    Write-Warning -Object  "Failed to uninstall HP Wolf Security 5 using MSI - Error message: $($_.Exception.Message)"
+}
+Try {
+    MsiExec.exe /X "{91E2255E-7422-404F-83F5-B18641499B68}" /qn /norestart
+    Write-Host -Object "Fallback to MSI uninistall for HP Wolf 6 Security initiated"
+}
+
+Catch {
+    Write-Warning -Object  "Failed to uninstall HP Wolf Security 6 using MSI - Error message: $($_.Exception.Message)"
+}
+Try {
+    MsiExec.exe /X "{C2F1EB22-02EB-4B5A-82F5-62C83BEF6626}" /qn /norestart
+    Write-Host -Object "Fallback to MSI uninistall for HP Wolf 7 Security initiated"
+}
+
+Catch {
+    Write-Warning -Object  "Failed to uninstall HP Wolf Security 7 using MSI - Error message: $($_.Exception.Message)"
+}
+
+CMD /C "C:\Program Files\HP\Documentation\Doc_Uninstall.cmd"
 
 # # Uncomment this section to see what is left behind
 # Write-Host "Checking stuff after running script"
