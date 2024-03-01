@@ -19,7 +19,7 @@
 # -- ref    : https://community.spiceworks.com/topic/2296941-powershell-script-to-remove-windowsapps-folder?page=1#entry-9032247
 # -- note   : this script could use your improvements. contributions welcome!
 # -- todo   : Wolf Security improvements ref: https://www.reddit.com/r/SCCM/comments/nru942/hp_wolf_security_how_to_remove_it/
-
+Start-Transcript -Path "C:\ProgramData\Debloat\Debloat.log"
 # List of built-in apps to remove
 $UninstallPackages = @(
     "AD2F1837.HPJumpStarts"
