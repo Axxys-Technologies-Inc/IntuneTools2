@@ -1835,6 +1835,10 @@ $whitelistapps = @(
     "Adobe Refresh Manager"
     "Adobe Acrobat 2020"
     "LogMeIn"
+    "Automate Control Center"
+    "MySQL Connector/ODBC 3.51"
+    "Microsoft Visual C++"
+    "ConnectWise Automate Control Center"
 )
 
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
