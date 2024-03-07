@@ -1819,7 +1819,7 @@ $whitelistapps = @(
     "Microsoft Edge"
     "Microsoft Edge Update"
     "Microsoft Edge WebView2 Runtime"
-    "Google Chrome"
+    "*Chrome*"
     "Microsoft Teams"
     "Teams Machine-Wide Installer"
     "Microsoft OneDrive"
@@ -1836,9 +1836,10 @@ $whitelistapps = @(
     "Adobe Acrobat 2020"
     "LogMeIn"
     "Automate Control Center"
-    "MySQL Connector/ODBC 3.51"
-    "Microsoft Visual C++"
+    "MySQL Connector*"
+    "Microsoft Visual C++*"
     "ConnectWise Automate Control Center"
+    "*ConnectWise*"
 )
 
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
