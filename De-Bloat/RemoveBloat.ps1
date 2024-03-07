@@ -1840,6 +1840,7 @@ $whitelistapps = @(
     "Microsoft Visual C++*"
     "ConnectWise Automate Control Center"
     "*ConnectWise*"
+    "*Zoom*"
 )
 
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
