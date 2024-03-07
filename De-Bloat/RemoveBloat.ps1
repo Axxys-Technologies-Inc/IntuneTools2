@@ -1834,12 +1834,14 @@ $whitelistapps = @(
     "ConnectWise Automate Remote Agent"
     "Adobe Refresh Manager"
     "Adobe Acrobat 2020"
+    "*Adobe Acrobat*"
     "LogMeIn"
     "Automate Control Center"
-    "MySQL Connector*"
+    "*MySQL Connector*"
     "Microsoft Visual C++*"
     "ConnectWise Automate Control Center"
     "*ConnectWise*"
+    "*Automate*"
     "*Zoom*"
 )
 
