@@ -133,8 +133,6 @@ Catch {
 
 }
 
-CMD /C "C:\Program Files\HP\Documentation\Doc_Uninstall.cmd"
-
 # # Uncomment this section to see what is left behind
 # Write-Host "Checking stuff after running script"
 # Write-Host "For Get-AppxPackage -AllUsers"
