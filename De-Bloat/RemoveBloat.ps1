@@ -1844,7 +1844,7 @@ $whitelistapps = @(
     "LogMeIn"
     "Automate Control Center"
     "*MySQL Connector*"
-    "Microsoft Visual C++*"
+    "*Microsoft Visual C++*"
     "ConnectWise Automate Control Center"
     "*ConnectWise*"
     "*Automate*"
