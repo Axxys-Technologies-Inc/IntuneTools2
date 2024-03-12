@@ -133,6 +133,10 @@ Catch {
 
 }
 
+write-host "Completed"
+
+Stop-Transcript
+
 # # Uncomment this section to see what is left behind
 # Write-Host "Checking stuff after running script"
 # Write-Host "For Get-AppxPackage -AllUsers"
