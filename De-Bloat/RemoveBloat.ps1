@@ -88,7 +88,7 @@ param (
     [string[]]$customwhitelist
 )
 
-$customwhitelist ='Microsoft Update Health Tools,Microsoft Intune Management Extension,Microsoft Edge,Microsoft Edge Update,Microsoft Edge WebView2 Runtime,Google Chrome,Microsoft Teams,Teams Machine-Wide Installer,Microsoft OneDrive,@C:\WINDOWS\System32\mstsc.exe,-4000,Halcyon AR,WatchGuard Mobile VPN with SSL client 12.10,Sophos Management Communications System,ScreenConnect Client (a91a12555ca17441),CYRISMA Sensor version 2.5,LogMeIn Client,Sophos Health,ConnectWise Automate Remote Agent,Adobe Refresh Manager,Adobe Acrobat 2020,*Adobe Acrobat*,LogMeIn,Automate Control Center,*MySQL Connector*,*Microsoft Visual C++*,ConnectWise Automate Control Center,*ConnectWise*,*Automate*,*Zoom*,*Chrome*'
+$customwhitelist ='*Adobe Acrobat*,*Automate*,*Chrome*',*ConnectWise*,*Duo*,*Microsoft .NET *,*Microsoft Visual*,*Microsoft Windows Desktop Runtime*,*MySQL Connector*,*Zoom*,Adobe Acrobat 2020,Adobe Refresh Manager,Automate Control Center,BCR Plug-in,Cisco Jabber,Citrix Authentication Manager,Citrix Web Helper,Citrix Workspace 2311,Citrix Workspace Inside,Citrix Workspace(DV),Citrix Workspace(USB),ConnectWise Automate Control Center,ConnectWise Automate Remote Agent,CYRISMA Sensor version 2.5,Google Chrome,Halcyon AR,HP Performance Advisor,HP Performance Advisor,LogMeIn,LogMeIn Client,Microsoft Edge,Microsoft Edge Update,Microsoft Edge WebView2 Runtime,Microsoft Intune Management Extension,Microsoft OneDrive,Microsoft Teams,Microsoft Update Health Tools,MTOP Client,Online Plug-in,ScreenConnect Client (a91a12555ca17441),Self-service Plug-in,Sophos Health,Sophos Management Communications System,Stamps.com,Teams Machine-Wide Installer'
 
 ##Elevate if needed
 
