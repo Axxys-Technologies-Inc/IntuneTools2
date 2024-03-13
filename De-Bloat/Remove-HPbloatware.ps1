@@ -134,11 +134,6 @@ Catch {
     Write-Warning -Object "Failed to uninstall HP Wolf Security using MSI - Error message: $($_.Exception.Message)"
 }
 
-
-Catch {
-    Write-Warning -Object  "Failed to uninstall HP Wolf Security 2 using MSI - Error message: $($_.Exception.Message)"
-}
-
 # Remove appx provisioned packages - AppxProvisionedPackage
 ForEach ($ProvPackage in $ProvisionedPackages) {
 
