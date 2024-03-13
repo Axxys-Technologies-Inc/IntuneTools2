@@ -163,10 +163,6 @@ ForEach ($AppxPackage in $InstalledPackages) {
     Catch {Write-Warning -Message "Failed to remove Appx package: [$($AppxPackage.Name)]"}
 }
 
-
-Get-ChildItem "C:\Program Files (x86)\Online Services\Adobe\*" -Recurse | Remove-Item
-Get-ChildItem "C:\ProgramData\HP\TCO\*" -Recurse | Remove-Item
-
 write-host "Completed"
 
 Stop-Transcript
