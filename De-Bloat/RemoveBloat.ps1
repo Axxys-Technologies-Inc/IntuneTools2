@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 .Removes bloat from a fresh Windows build
 .DESCRIPTION
@@ -88,6 +88,8 @@ param (
     [string[]]$customwhitelist
 )
 
+$customwhitelist ='Microsoft Update Health Tools,Microsoft Intune Management Extension,Microsoft Edge,Microsoft Edge Update,Microsoft Edge WebView2 Runtime,Google Chrome,Microsoft Teams,Teams Machine-Wide Installer,Microsoft OneDrive,@C:\WINDOWS\System32\mstsc.exe,-4000,Halcyon AR,WatchGuard Mobile VPN with SSL client 12.10,Sophos Management Communications System,ScreenConnect Client (a91a12555ca17441),CYRISMA Sensor version 2.5,LogMeIn Client,Sophos Health,ConnectWise Automate Remote Agent,Adobe Refresh Manager,Adobe Acrobat 2020,*Adobe Acrobat*,LogMeIn,Automate Control Center,*MySQL Connector*,*Microsoft Visual C++*,ConnectWise Automate Control Center,*ConnectWise*,*Automate*,*Zoom*,*Chrome*'
+
 ##Elevate if needed
 
 If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
@@ -127,16 +129,16 @@ $locale = Get-WinSystemLocale | Select-Object -expandproperty Name
 ## Switch on locale to set variables
 switch ($locale) {
     "ar-SA" {
-        $everyone = "الجميع"
-        $builtin = "مدمج"
+        $everyone = "??????"
+        $builtin = "????"
     }
     "bg-BG" {
-        $everyone = "Всички"
-        $builtin = "Вграден"
+        $everyone = "??????"
+        $builtin = "???????"
     }
     "cs-CZ" {
         $everyone = "Všichni"
-        $builtin = "Vestavěný"
+        $builtin = "Vestav?ný"
     }
     "da-DK" {
         $everyone = "Alle"
@@ -147,8 +149,8 @@ switch ($locale) {
         $builtin = "Integriert"
     }
     "el-GR" {
-        $everyone = "Όλοι"
-        $builtin = "Ενσωματωμένο"
+        $everyone = "????"
+        $builtin = "????????????"
     }
     "en-US" {
         $everyone = "Everyone"
@@ -175,12 +177,12 @@ switch ($locale) {
         $builtin = "Intégré"
     }
     "he-IL" {
-        $everyone = "כולם"
-        $builtin = "מובנה"
+        $everyone = "????"
+        $builtin = "?????"
     }
     "hr-HR" {
         $everyone = "Svi"
-        $builtin = "Ugrađeni"
+        $builtin = "Ugraðeni"
     }
     "hu-HU" {
         $everyone = "Mindenki"
@@ -191,20 +193,20 @@ switch ($locale) {
         $builtin = "Incorporato"
     }
     "ja-JP" {
-        $everyone = "すべてのユーザー"
-        $builtin = "ビルトイン"
+        $everyone = "????????"
+        $builtin = "?????"
     }
     "ko-KR" {
-        $everyone = "모든 사용자"
-        $builtin = "기본 제공"
+        $everyone = "?? ???"
+        $builtin = "?? ??"
     }
     "lt-LT" {
         $everyone = "Visi"
-        $builtin = "Įmontuotas"
+        $builtin = "?montuotas"
     }
     "lv-LV" {
         $everyone = "Visi"
-        $builtin = "Iebūvēts"
+        $builtin = "Ieb?v?ts"
     }
     "nb-NO" {
         $everyone = "Alle"
@@ -227,12 +229,12 @@ switch ($locale) {
         $builtin = "Incorporado"
     }
     "ro-RO" {
-        $everyone = "Toată lumea"
+        $everyone = "Toat? lumea"
         $builtin = "Incorporat"
     }
     "ru-RU" {
-        $everyone = "Все пользователи"
-        $builtin = "Встроенный"
+        $everyone = "??? ????????????"
+        $builtin = "??????????"
     }
     "sk-SK" {
         $everyone = "Všetci"
@@ -244,31 +246,31 @@ switch ($locale) {
     }
     "sr-Latn-RS" {
         $everyone = "Svi"
-        $builtin = "Ugrađeni"
+        $builtin = "Ugraðeni"
     }
     "sv-SE" {
         $everyone = "Alla"
         $builtin = "Inbyggd"
     }
     "th-TH" {
-        $everyone = "ทุกคน"
-        $builtin = "ภายในเครื่อง"
+        $everyone = "?????"
+        $builtin = "????????????"
     }
     "tr-TR" {
         $everyone = "Herkes"
-        $builtin = "Yerleşik"
+        $builtin = "Yerle?ik"
     }
     "uk-UA" {
-        $everyone = "Всі"
-        $builtin = "Вбудований"
+        $everyone = "???"
+        $builtin = "??????????"
     }
     "zh-CN" {
-        $everyone = "所有人"
-        $builtin = "内置"
+        $everyone = "???"
+        $builtin = "??"
     }
     "zh-TW" {
-        $everyone = "所有人"
-        $builtin = "內建"
+        $everyone = "???"
+        $builtin = "??"
     }
     default {
         $everyone = "Everyone"
@@ -1203,27 +1205,27 @@ if ($manufacturer -like "*HP*") {
     #Remove HP bloat
 
 
-##HP Specific
-$UninstallPrograms = @(
-    "HP Client Security Manager"
-    "HP Notifications"
-    "HP Security Update Service"
-    "HP System Default Settings"
-    "HP Wolf Security"
-    "HP Wolf Security Application Support for Sure Sense"
-    "HP Wolf Security Application Support for Windows"
-    "AD2F1837.HPPCHardwareDiagnosticsWindows"
-    "AD2F1837.HPPowerManager"
-    "AD2F1837.HPPrivacySettings"
-    "AD2F1837.HPQuickDrop"
-    "AD2F1837.HPSupportAssistant"
-    "AD2F1837.HPSystemInformation"
-    "AD2F1837.myHP"
-    "RealtekSemiconductorCorp.HPAudioControl",
-    "HP Sure Recover",
-    "HP Sure Run Module"
-    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
-)
+	##HP Specific
+	$UninstallPrograms = @(
+	    "HP Client Security Manager"
+	    "HP Notifications"
+	    "HP Security Update Service"
+	    "HP System Default Settings"
+	    "HP Wolf Security"
+	    "HP Wolf Security Application Support for Sure Sense"
+	    "HP Wolf Security Application Support for Windows"
+	    "AD2F1837.HPPCHardwareDiagnosticsWindows"
+	    "AD2F1837.HPPowerManager"
+	    "AD2F1837.HPPrivacySettings"
+	    "AD2F1837.HPQuickDrop"
+	    "AD2F1837.HPSupportAssistant"
+	    "AD2F1837.HPSystemInformation"
+	    "AD2F1837.myHP"
+	    "RealtekSemiconductorCorp.HPAudioControl",
+	    "HP Sure Recover",
+	    "HP Sure Run Module"
+	    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
+	)
 
     ##If custom whitelist specified, remove from array
     if ($customwhitelist) {
@@ -1231,7 +1233,7 @@ $UninstallPrograms = @(
         $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
     }
 
-    $WhitelistedApps = @(
+    $WhitelistedApps = @( 
 )
 
 ##Add custom whitelist apps
@@ -1830,26 +1832,6 @@ $whitelistapps = @(
     "Teams Machine-Wide Installer"
     "Microsoft OneDrive"
     "@C:\WINDOWS\System32\mstsc.exe,-4000"
-    "Halcyon AR"
-    "WatchGuard Mobile VPN with SSL client 12.10"
-    "Sophos Management Communications System"
-    "ScreenConnect Client (a91a12555ca17441)"
-    "CYRISMA Sensor version 2.5"
-    "LogMeIn Client"
-    "Sophos Health"
-    "ConnectWise Automate Remote Agent"
-    "Adobe Refresh Manager"
-    "Adobe Acrobat 2020"
-    "*Adobe Acrobat*"
-    "LogMeIn"
-    "Automate Control Center"
-    "*MySQL Connector*"
-    "*Microsoft Visual C++*"
-    "ConnectWise Automate Control Center"
-    "*ConnectWise*"
-    "*Automate*"
-    "*Zoom*"
-    "*Chrome*"
 )
 
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
