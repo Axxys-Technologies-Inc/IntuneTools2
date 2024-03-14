@@ -88,7 +88,7 @@ N/A
 param (
     [string[]]$customwhitelist
 )
-
+$customwhitelist ='*Adobe Acrobat*,*Automate*,*Chrome*,*ConnectWise*,*Duo*,*LogMeIn*,*Microsoft .NET *,*Microsoft Visual*,*Microsoft Windows Desktop Runtime*,*MySQL Connector*,*ScreenConnect*,*Teams*,*Zoom*,Adobe Refresh Manager,BCR Plug-in,Cisco Jabber,Citrix Authentication Manager,Citrix Web Helper,Citrix Workspace 2311,Citrix Workspace Inside,Citrix Workspace(DV),Citrix Workspace(USB),CYRISMA Sensor version 2.5,Halcyon AR,HP Performance Advisor,HP Performance Advisor,*Microsoft Intune*,MTOP Client,Online Plug-in,Self-service Plug-in,Stamps.com'
 ##Elevate if needed
 
 If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
