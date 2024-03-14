@@ -61,10 +61,8 @@ $UninstallPrograms = @(
     "HP Sure Recover"
     "HP Sure Sense"
     "HP Sure Sense Installer"
-    "HP Wolf Security"
-    "HP Wolf Security - Console"
-    "HP Wolf Security Application Support for Sure Sense"
-    "HP Wolf Security Application Support for Windows"
+	"*HP Wolf*"
+	"*HP Security*"
 )
 
 $HPidentifier = "AD2F1837"
