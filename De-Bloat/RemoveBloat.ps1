@@ -147,7 +147,7 @@ switch ($locale) {
     |Microsoft.MicrosoftStickyNotes|Microsoft.MSPaint|Microsoft.WindowsCamera|.NET|Framework|`
     Microsoft.HEIFImageExtension|Microsoft.ScreenSketch|Microsoft.StorePurchaseApp|Microsoft.VP9VideoExtensions|Microsoft.WebMediaExtensions|Microsoft.WebpImageExtension|Microsoft.DesktopAppInstaller|WindSynthBerry|MIDIBerry|Slack'
     ##If $customwhitelist is set, split on the comma and add to whitelist
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
         $WhitelistedApps += "|"
         $WhitelistedApps += $customWhitelistApps -join "|"
@@ -246,7 +246,7 @@ $Bloatware = @(
     #"*Microsoft.WindowsStore*"
 )
 ##If custom whitelist specified, remove from array
-if ($customwhitelist) {
+iif ($customwhitelist) {
     $customWhitelistApps = $customwhitelist -split ","
     $Bloatware = $Bloatware | Where-Object { $customWhitelistApps -notcontains $_ }
 }
@@ -577,27 +577,27 @@ Get-AppxPackage - allusers Microsoft.549981C3F5F10 | Remove AppxPackage
     #Disables scheduled tasks that are considered unnecessary 
     Write-Host "Disabling scheduled tasks"
     $task1 = Get-ScheduledTask -TaskName XblGameSaveTaskLogon -ErrorAction SilentlyContinue
-    if ($null -ne $task1) {
+    iif ($null -ne $task1) {
     Get-ScheduledTask  XblGameSaveTaskLogon | Disable-ScheduledTask -ErrorAction SilentlyContinue
     }
     $task2 = Get-ScheduledTask -TaskName XblGameSaveTask -ErrorAction SilentlyContinue
-    if ($null -ne $task2) {
+    iif ($null -ne $task2) {
     Get-ScheduledTask  XblGameSaveTask | Disable-ScheduledTask -ErrorAction SilentlyContinue
     }
     $task3 = Get-ScheduledTask -TaskName Consolidator -ErrorAction SilentlyContinue
-    if ($null -ne $task3) {
+    iif ($null -ne $task3) {
     Get-ScheduledTask  Consolidator | Disable-ScheduledTask -ErrorAction SilentlyContinue
     }
     $task4 = Get-ScheduledTask -TaskName UsbCeip -ErrorAction SilentlyContinue
-    if ($null -ne $task4) {
+    iif ($null -ne $task4) {
     Get-ScheduledTask  UsbCeip | Disable-ScheduledTask -ErrorAction SilentlyContinue
     }
     $task5 = Get-ScheduledTask -TaskName DmClient -ErrorAction SilentlyContinue
-    if ($null -ne $task5) {
+    iif ($null -ne $task5) {
     Get-ScheduledTask  DmClient | Disable-ScheduledTask -ErrorAction SilentlyContinue
     }
     $task6 = Get-ScheduledTask -TaskName DmClientOnScenarioDownload -ErrorAction SilentlyContinue
-    if ($null -ne $task6) {
+    iif ($null -ne $task6) {
     Get-ScheduledTask  DmClientOnScenarioDownload | Disable-ScheduledTask -ErrorAction SilentlyContinue
     }
 
@@ -628,7 +628,7 @@ Get-AppxPackage - allusers Microsoft.549981C3F5F10 | Remove AppxPackage
         "Microsoft.Windows.ParentalControls"
     )
     ##If custom whitelist specified, remove from array
-if ($customwhitelist) {
+iif ($customwhitelist) {
     $customWhitelistApps = $customwhitelist -split ","
     $packages = $packages | Where-Object { $customWhitelistApps -notcontains $_ }
 }
@@ -636,7 +636,7 @@ if ($customwhitelist) {
 
     foreach ($package in $packages) {
         $appPackage = Get-AppxPackage -allusers $package -ErrorAction SilentlyContinue
-        if ($appPackage) {
+        iif ($appPackage) {
             Remove-AppxPackage -Package $appPackage.PackageFullName -AllUsers
             Write-Host "Removed $package"
         }
@@ -647,12 +647,12 @@ $MSTeams = "MicrosoftTeams"
 
 $WinPackage = Get-AppxPackage -allusers | Where-Object {$_.Name -eq $MSTeams}
 $ProvisionedPackage = Get-AppxProvisionedPackage -Online | Where-Object { $_.DisplayName -eq $WinPackage }
-If ($null -ne $WinPackage) 
+Iif ($null -ne $WinPackage) 
 {
     Remove-AppxPackage  -Package $WinPackage.PackageFullName -AllUsers
 } 
 
-If ($null -ne $ProvisionedPackage) 
+Iif ($null -ne $ProvisionedPackage) 
 {
     Remove-AppxProvisionedPackage -online -Packagename $ProvisionedPackage.Packagename -AllUsers
 }
@@ -683,7 +683,7 @@ write-host "Removed Teams Chat"
 #                                                                                                          #
 ############################################################################################################
 $version = Get-CimInstance Win32_OperatingSystem | Select-Object -ExpandProperty Caption
-if ($version -like "*Windows 10*") {
+iif ($version -like "*Windows 10*") {
     write-host "Removing Windows Backup"
     $filepath = "C:\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\WindowsBackup\Assets"
 if (Test-Path $filepath) {
@@ -702,7 +702,7 @@ write-host "Removed"
 #                                                                                                          #
 ############################################################################################################
 $version = Get-CimInstance Win32_OperatingSystem | Select-Object -ExpandProperty Caption
-if ($version -like "*Windows 11*") {
+iif ($version -like "*Windows 11*") {
     write-host "Removing Windows Copilot"
 # Define the registry key and value
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot"
@@ -719,7 +719,7 @@ if (!(Test-Path $registryPath)) {
 $currentValue = Get-ItemProperty -Path $registryPath -Name $propertyName -ErrorAction SilentlyContinue
 
 # Check if the property exists and if its value is different from the desired value
-if ($null -eq $currentValue -or $currentValue.$propertyName -ne $propertyValue) {
+iif ($null -eq $currentValue -or $currentValue.$propertyName -ne $propertyValue) {
     # If the property doesn't exist or its value is different, set the property value
     Set-ItemProperty -Path $registryPath -Name $propertyName -Value $propertyValue
 }
@@ -740,7 +740,7 @@ if (!(Test-Path $registryPath)) {
 $currentValue = Get-ItemProperty -Path $registryPath -Name $propertyName -ErrorAction SilentlyContinue
 
 # Check if the property exists and if its value is different from the desired value
-if ($null -eq $currentValue -or $currentValue.$propertyName -ne $propertyValue) {
+iif ($null -eq $currentValue -or $currentValue.$propertyName -ne $propertyValue) {
     # If the property doesn't exist or its value is different, set the property value
     Set-ItemProperty -Path $registryPath -Name $propertyName -Value $propertyValue
 }
@@ -788,7 +788,7 @@ foreach ($sid in $UserSIDs) {
     $currentValue = Get-ItemProperty -Path $registryPath -Name $propertyName -ErrorAction SilentlyContinue
     
     # Check if the property exists and if its value is different from the desired value
-    if ($null -eq $currentValue -or $currentValue.$propertyName -ne $propertyValue) {
+    iif ($null -eq $currentValue -or $currentValue.$propertyName -ne $propertyValue) {
         # If the property doesn't exist or its value is different, set the property value
         Set-ItemProperty -Path $registryPath -Name $propertyName -Value $propertyValue
     }
@@ -804,7 +804,7 @@ write-host "Clearing Start Menu"
 
 ##Check windows version
 $version = Get-CimInstance Win32_OperatingSystem | Select-Object -ExpandProperty Caption
-if ($version -like "*Windows 10*") {
+iif ($version -like "*Windows 10*") {
     write-host "Windows 10 Detected"
     write-host "Removing Current Layout"
     If(Test-Path C:\Windows\StartLayout.xml)
@@ -833,7 +833,7 @@ if ($version -like "*Windows 10*") {
     
     Write-Output "</LayoutModificationTemplate>" >> C:\Windows\StartLayout.xml
 }
-if ($version -like "*Windows 11*") {
+iif ($version -like "*Windows 11*") {
     write-host "Windows 11 Detected"
     write-host "Removing Current Layout"
     If(Test-Path "C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml")
@@ -869,7 +869,7 @@ Set-Service -Name XblGameSave -StartupType Disabled
 Set-Service -Name XboxGipSvc -StartupType Disabled
 Set-Service -Name XboxNetApiSvc -StartupType Disabled
 $task = Get-ScheduledTask -TaskName "Microsoft\XblGameSave\XblGameSaveTask" -ErrorAction SilentlyContinue
-if ($null -ne $task) {
+iif ($null -ne $task) {
 Set-ScheduledTask -TaskPath $task.TaskPath -Enabled $false
 }
 
@@ -930,7 +930,7 @@ foreach ($32app in $32apps) {
 #Get uninstall string
 $string1 =  $32app.uninstallstring
 #Check if it's an MSI install
-if ($string1 -match "^msiexec*") {
+iif ($string1 -match "^msiexec*") {
 #MSI install, replace the I with an X and make it quiet
 $string2 = $string1 + " /quiet /norestart"
 $string2 = $string2 -replace "/I", "/X "
@@ -962,7 +962,7 @@ foreach ($64app in $64apps) {
 #Get uninstall string
 $string1 =  $64app.uninstallstring
 #Check if it's an MSI install
-if ($string1 -match "^msiexec*") {
+iif ($string1 -match "^msiexec*") {
 #MSI install, replace the I with an X and make it quiet
 $string2 = $string1 + " /quiet /norestart"
 $string2 = $string2 -replace "/I", "/X "
@@ -998,7 +998,7 @@ foreach ($32app in $32apps) {
 #Get uninstall string
 $string1 =  $32app.uninstallstring
 #Check if it's an MSI install
-if ($string1 -match "^msiexec*") {
+iif ($string1 -match "^msiexec*") {
 #MSI install, replace the I with an X and make it quiet
 $string2 = $string1 + " /quiet /norestart"
 $string2 = $string2 -replace "/I", "/X "
@@ -1030,7 +1030,7 @@ foreach ($64app in $64apps) {
 #Get uninstall string
 $string1 =  $64app.uninstallstring
 #Check if it's an MSI install
-if ($string1 -match "^msiexec*") {
+iif ($string1 -match "^msiexec*") {
 #MSI install, replace the I with an X and make it quiet
 $string2 = $string1 + " /quiet /norestart"
 $string2 = $string2 -replace "/I", "/X "
@@ -1060,6 +1060,131 @@ write-host "Detecting Manufacturer"
 $details = Get-CimInstance -ClassName Win32_ComputerSystem
 $manufacturer = $details.Manufacturer
 
+iif ($manufacturer -like "*HP*") {
+    Write-Host "HP detected"
+    #Remove HP bloat
+
+
+##HP Specific
+$UninstallPrograms = @(
+    "HP Client Security Manager"
+    "HP Notifications"
+    "HP Security Update Service"
+    "HP System Default Settings"
+    "*HP Wolf*"
+    "HP Wolf Security"
+    "HP Wolf Security Application Support for Sure Sense"
+    "HP Wolf Security Application Support for Windows"
+    "AD2F1837.HPPCHardwareDiagnosticsWindows"
+    "AD2F1837.HPPowerManager"
+    "AD2F1837.HPPrivacySettings"
+    "AD2F1837.HPQuickDrop"
+    "AD2F1837.HPSupportAssistant"
+    "AD2F1837.HPSystemInformation"
+    "AD2F1837.myHP"
+    "RealtekSemiconductorCorp.HPAudioControl",
+    "HP Sure Recover",
+    "HP Sure Run Module"
+    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
+)
+
+    ##If custom whitelist specified, remove from array
+    iif ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+        $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
+    }
+
+    $WhitelistedApps = @(
+)
+
+##Add custom whitelist apps
+    ##If custom whitelist specified, remove from array
+    iif ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+    foreach ($customwhitelistapp in $customwhitelistapps) {
+        $WhitelistedApps += $customwhitelistapp
+    }        
+    }
+
+$HPidentifier = "AD2F1837"
+
+$InstalledPackages = Get-AppxPackage -AllUsers | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$ProvisionedPackages = Get-AppxProvisionedPackage -Online | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$InstalledPrograms = $allstring | Where-Object {$UninstallPrograms -contains $_.Name}
+
+# Remove provisioned packages first
+ForEach ($ProvPackage in $ProvisionedPackages) {
+
+    Write-Host -Object "Attempting to remove provisioned package: [$($ProvPackage.DisplayName)]..."
+
+    Try {
+        $Null = Remove-AppxProvisionedPackage -PackageName $ProvPackage.PackageName -Online -ErrorAction Stop
+        Write-Host -Object "Successfully removed provisioned package: [$($ProvPackage.DisplayName)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove provisioned package: [$($ProvPackage.DisplayName)]"}
+}
+
+# Remove appx packages
+ForEach ($AppxPackage in $InstalledPackages) {
+                                            
+    Write-Host -Object "Attempting to remove Appx package: [$($AppxPackage.Name)]..."
+
+    Try {
+        $Null = Remove-AppxPackage -Package $AppxPackage.PackageFullName -AllUsers -ErrorAction Stop
+        Write-Host -Object "Successfully removed Appx package: [$($AppxPackage.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove Appx package: [$($AppxPackage.Name)]"}
+}
+
+# Remove installed programs
+$InstalledPrograms | ForEach-Object {
+
+    Write-Host -Object "Attempting to uninstall: [$($_.Name)]..."
+    $uninstallcommand = $_.String
+
+    Try {
+        iif ($uninstallcommand -match "^msiexec*") {
+            #Remove msiexec as we need to split for the uninstall
+            $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
+            #Uninstall with string2 params
+            Start-Process 'msiexec.exe' -ArgumentList $uninstallcommand -NoNewWindow -Wait
+            }
+            else {
+            #Exe installer, run straight path
+            $string2 = $uninstallcommand
+            start-process $string2
+            }
+        #$A = Start-Process -FilePath $uninstallcommand -Wait -passthru -NoNewWindow;$a.ExitCode
+        #$Null = $_ | Uninstall-Package -AllVersions -Force -ErrorAction Stop
+        Write-Host -Object "Successfully uninstalled: [$($_.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to uninstall: [$($_.Name)]"}
+
+
+}
+
+##Belt and braces, remove via CIM too
+foreach ($program in $UninstallPrograms) {
+Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
+}
+
+
+#Remove HP Documentation if it exists
+if (test-path -Path "C:\Program Files\HP\Documentation\Doc_uninstall.cmd") {
+$A = Start-Process -FilePath "C:\Program Files\HP\Documentation\Doc_uninstall.cmd" -Wait -passthru -NoNewWindow
+}
+
+##Remove HP Connect Optimizer if setup.exe exists
+if (test-path -Path 'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe') {
+invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public/main/De-Bloat/HPConnOpt.iss" -outfile "C:\Windows\Temp\HPConnOpt.iss"
+
+&'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe' @('-s', '-f1C:\Windows\Temp\HPConnOpt.iss')
+}
+Write-Host "Removed HP bloat"
+}
+
 if ($manufacturer -like "*HP*") {
     Write-Host "HP detected"
     #Remove HP bloat
@@ -1071,6 +1196,7 @@ $UninstallPrograms = @(
     "HP Notifications"
     "HP Security Update Service"
     "HP System Default Settings"
+    "*HP Wolf*"
     "HP Wolf Security"
     "HP Wolf Security Application Support for Sure Sense"
     "HP Wolf Security Application Support for Windows"
@@ -1088,7 +1214,7 @@ $UninstallPrograms = @(
 )
 
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
         $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
     }
@@ -1098,7 +1224,7 @@ $UninstallPrograms = @(
 
 ##Add custom whitelist apps
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
     foreach ($customwhitelistapp in $customwhitelistapps) {
         $WhitelistedApps += $customwhitelistapp
@@ -1144,7 +1270,7 @@ $InstalledPrograms | ForEach-Object {
     $uninstallcommand = $_.String
 
     Try {
-        if ($uninstallcommand -match "^msiexec*") {
+        iif ($uninstallcommand -match "^msiexec*") {
             #Remove msiexec as we need to split for the uninstall
             $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
             #Uninstall with string2 params
@@ -1184,7 +1310,7 @@ invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public
 Write-Host "Removed HP bloat"
 }
 
-f ($manufacturer -like "*HP*") {
+if ($manufacturer -like "*HP*") {
     Write-Host "HP detected"
     #Remove HP bloat
 
@@ -1195,6 +1321,7 @@ $UninstallPrograms = @(
     "HP Notifications"
     "HP Security Update Service"
     "HP System Default Settings"
+    "*HP Wolf*"
     "HP Wolf Security"
     "HP Wolf Security Application Support for Sure Sense"
     "HP Wolf Security Application Support for Windows"
@@ -1212,7 +1339,7 @@ $UninstallPrograms = @(
 )
 
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
         $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
     }
@@ -1222,7 +1349,7 @@ $UninstallPrograms = @(
 
 ##Add custom whitelist apps
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
     foreach ($customwhitelistapp in $customwhitelistapps) {
         $WhitelistedApps += $customwhitelistapp
@@ -1268,7 +1395,7 @@ $InstalledPrograms | ForEach-Object {
     $uninstallcommand = $_.String
 
     Try {
-        if ($uninstallcommand -match "^msiexec*") {
+        iif ($uninstallcommand -match "^msiexec*") {
             #Remove msiexec as we need to split for the uninstall
             $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
             #Uninstall with string2 params
@@ -1308,7 +1435,7 @@ invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public
 Write-Host "Removed HP bloat"
 }
 
-f ($manufacturer -like "*HP*") {
+if ($manufacturer -like "*HP*") {
     Write-Host "HP detected"
     #Remove HP bloat
 
@@ -1319,6 +1446,7 @@ $UninstallPrograms = @(
     "HP Notifications"
     "HP Security Update Service"
     "HP System Default Settings"
+    "*HP Wolf*"
     "HP Wolf Security"
     "HP Wolf Security Application Support for Sure Sense"
     "HP Wolf Security Application Support for Windows"
@@ -1336,7 +1464,7 @@ $UninstallPrograms = @(
 )
 
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
         $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
     }
@@ -1346,7 +1474,7 @@ $UninstallPrograms = @(
 
 ##Add custom whitelist apps
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
     foreach ($customwhitelistapp in $customwhitelistapps) {
         $WhitelistedApps += $customwhitelistapp
@@ -1392,7 +1520,7 @@ $InstalledPrograms | ForEach-Object {
     $uninstallcommand = $_.String
 
     Try {
-        if ($uninstallcommand -match "^msiexec*") {
+        iif ($uninstallcommand -match "^msiexec*") {
             #Remove msiexec as we need to split for the uninstall
             $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
             #Uninstall with string2 params
@@ -1432,7 +1560,7 @@ invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public
 Write-Host "Removed HP bloat"
 }
 
-f ($manufacturer -like "*HP*") {
+if ($manufacturer -like "*HP*") {
     Write-Host "HP detected"
     #Remove HP bloat
 
@@ -1443,6 +1571,7 @@ $UninstallPrograms = @(
     "HP Notifications"
     "HP Security Update Service"
     "HP System Default Settings"
+    "*HP Wolf*"
     "HP Wolf Security"
     "HP Wolf Security Application Support for Sure Sense"
     "HP Wolf Security Application Support for Windows"
@@ -1460,7 +1589,7 @@ $UninstallPrograms = @(
 )
 
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
         $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
     }
@@ -1470,7 +1599,7 @@ $UninstallPrograms = @(
 
 ##Add custom whitelist apps
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
     foreach ($customwhitelistapp in $customwhitelistapps) {
         $WhitelistedApps += $customwhitelistapp
@@ -1516,131 +1645,7 @@ $InstalledPrograms | ForEach-Object {
     $uninstallcommand = $_.String
 
     Try {
-        if ($uninstallcommand -match "^msiexec*") {
-            #Remove msiexec as we need to split for the uninstall
-            $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
-            #Uninstall with string2 params
-            Start-Process 'msiexec.exe' -ArgumentList $uninstallcommand -NoNewWindow -Wait
-            }
-            else {
-            #Exe installer, run straight path
-            $string2 = $uninstallcommand
-            start-process $string2
-            }
-        #$A = Start-Process -FilePath $uninstallcommand -Wait -passthru -NoNewWindow;$a.ExitCode
-        #$Null = $_ | Uninstall-Package -AllVersions -Force -ErrorAction Stop
-        Write-Host -Object "Successfully uninstalled: [$($_.Name)]"
-    }
-    Catch {Write-Warning -Message "Failed to uninstall: [$($_.Name)]"}
-
-
-}
-
-##Belt and braces, remove via CIM too
-foreach ($program in $UninstallPrograms) {
-Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
-}
-
-
-#Remove HP Documentation if it exists
-if (test-path -Path "C:\Program Files\HP\Documentation\Doc_uninstall.cmd") {
-$A = Start-Process -FilePath "C:\Program Files\HP\Documentation\Doc_uninstall.cmd" -Wait -passthru -NoNewWindow
-}
-
-##Remove HP Connect Optimizer if setup.exe exists
-if (test-path -Path 'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe') {
-invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public/main/De-Bloat/HPConnOpt.iss" -outfile "C:\Windows\Temp\HPConnOpt.iss"
-
-&'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe' @('-s', '-f1C:\Windows\Temp\HPConnOpt.iss')
-}
-Write-Host "Removed HP bloat"
-}
-
-f ($manufacturer -like "*HP*") {
-    Write-Host "HP detected"
-    #Remove HP bloat
-
-
-##HP Specific
-$UninstallPrograms = @(
-    "HP Client Security Manager"
-    "HP Notifications"
-    "HP Security Update Service"
-    "HP System Default Settings"
-    "HP Wolf Security"
-    "HP Wolf Security Application Support for Sure Sense"
-    "HP Wolf Security Application Support for Windows"
-    "AD2F1837.HPPCHardwareDiagnosticsWindows"
-    "AD2F1837.HPPowerManager"
-    "AD2F1837.HPPrivacySettings"
-    "AD2F1837.HPQuickDrop"
-    "AD2F1837.HPSupportAssistant"
-    "AD2F1837.HPSystemInformation"
-    "AD2F1837.myHP"
-    "RealtekSemiconductorCorp.HPAudioControl",
-    "HP Sure Recover",
-    "HP Sure Run Module"
-    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
-)
-
-    ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
-        $customWhitelistApps = $customwhitelist -split ","
-        $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
-    }
-
-    $WhitelistedApps = @(
-)
-
-##Add custom whitelist apps
-    ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
-        $customWhitelistApps = $customwhitelist -split ","
-    foreach ($customwhitelistapp in $customwhitelistapps) {
-        $WhitelistedApps += $customwhitelistapp
-    }        
-    }
-
-$HPidentifier = "AD2F1837"
-
-$InstalledPackages = Get-AppxPackage -AllUsers | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
-
-$ProvisionedPackages = Get-AppxProvisionedPackage -Online | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
-
-$InstalledPrograms = $allstring | Where-Object {$UninstallPrograms -contains $_.Name}
-
-# Remove provisioned packages first
-ForEach ($ProvPackage in $ProvisionedPackages) {
-
-    Write-Host -Object "Attempting to remove provisioned package: [$($ProvPackage.DisplayName)]..."
-
-    Try {
-        $Null = Remove-AppxProvisionedPackage -PackageName $ProvPackage.PackageName -Online -ErrorAction Stop
-        Write-Host -Object "Successfully removed provisioned package: [$($ProvPackage.DisplayName)]"
-    }
-    Catch {Write-Warning -Message "Failed to remove provisioned package: [$($ProvPackage.DisplayName)]"}
-}
-
-# Remove appx packages
-ForEach ($AppxPackage in $InstalledPackages) {
-                                            
-    Write-Host -Object "Attempting to remove Appx package: [$($AppxPackage.Name)]..."
-
-    Try {
-        $Null = Remove-AppxPackage -Package $AppxPackage.PackageFullName -AllUsers -ErrorAction Stop
-        Write-Host -Object "Successfully removed Appx package: [$($AppxPackage.Name)]"
-    }
-    Catch {Write-Warning -Message "Failed to remove Appx package: [$($AppxPackage.Name)]"}
-}
-
-# Remove installed programs
-$InstalledPrograms | ForEach-Object {
-
-    Write-Host -Object "Attempting to uninstall: [$($_.Name)]..."
-    $uninstallcommand = $_.String
-
-    Try {
-        if ($uninstallcommand -match "^msiexec*") {
+        iif ($uninstallcommand -match "^msiexec*") {
             #Remove msiexec as we need to split for the uninstall
             $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
             #Uninstall with string2 params
@@ -1684,7 +1689,7 @@ Write-Host "Removed HP bloat"
 
 
 
-if ($manufacturer -like "*Dell*") {
+iif ($manufacturer -like "*Dell*") {
     Write-Host "Dell detected"
     #Remove Dell bloat
 
@@ -1738,7 +1743,7 @@ $WhitelistedApps = @(
 
 ##Add custom whitelist apps
     ##If custom whitelist specified, remove from array
-    if ($customwhitelist) {
+    iif ($customwhitelist) {
         $customWhitelistApps = $customwhitelist -split ","
     foreach ($customwhitelistapp in $customwhitelistapps) {
         $WhitelistedApps += $customwhitelistapp
@@ -1794,7 +1799,7 @@ $InstalledPrograms | ForEach-Object {
     $uninstallcommand = $_.String
 
     Try {
-        if ($uninstallcommand -match "^msiexec*") {
+        iif ($uninstallcommand -match "^msiexec*") {
             #Remove msiexec as we need to split for the uninstall
             $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
             $uninstallcommand = $uninstallcommand + " /quiet /norestart"
@@ -1825,7 +1830,7 @@ foreach ($program in $UninstallPrograms) {
 $dellSA = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object { $_.DisplayName -like "Dell*Optimizer*Core" } | Select-Object -Property UninstallString
  
 ForEach ($sa in $dellSA) {
-    If ($sa.UninstallString) {
+    Iif ($sa.UninstallString) {
         cmd.exe /c $sa.UninstallString /quiet /norestart
     }
 }
@@ -1834,7 +1839,7 @@ ForEach ($sa in $dellSA) {
 $dellSA = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object { $_.DisplayName -match "SupportAssist" } | Select-Object -Property UninstallString
  
 ForEach ($sa in $dellSA) {
-    If ($sa.UninstallString) {
+    Iif ($sa.UninstallString) {
         cmd.exe /c $sa.UninstallString /quiet /norestart
     }
 }
@@ -1846,7 +1851,7 @@ Start-Process 'msiexec.exe' -ArgumentList $uninstallcommand -NoNewWindow -Wait
 }
 
 
-if ($manufacturer -like "Lenovo") {
+iif ($manufacturer -like "Lenovo") {
     Write-Host "Lenovo detected"
 
     #Remove HP bloat
@@ -1915,7 +1920,7 @@ if ($manufacturer -like "Lenovo") {
     )
 
         ##If custom whitelist specified, remove from array
-        if ($customwhitelist) {
+        iif ($customwhitelist) {
             $customWhitelistApps = $customwhitelist -split ","
             $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
         }
@@ -1970,7 +1975,7 @@ $InstalledPrograms | ForEach-Object {
     $uninstallcommand = $_.String
 
     Try {
-        if ($uninstallcommand -match "^msiexec*") {
+        iif ($uninstallcommand -match "^msiexec*") {
             #Remove msiexec as we need to split for the uninstall
             $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
             #Uninstall with string2 params
@@ -2085,7 +2090,7 @@ $mcafeeinstalled = "false"
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 foreach($obj in $InstalledSoftware){
      $name = $obj.GetValue('DisplayName')
-     if ($name -like "*McAfee*") {
+     iif ($name -like "*McAfee*") {
          $mcafeeinstalled = "true"
      }
 }
@@ -2093,12 +2098,12 @@ foreach($obj in $InstalledSoftware){
 $InstalledSoftware32 = Get-ChildItem "HKLM:\Software\WOW6432NODE\Microsoft\Windows\CurrentVersion\Uninstall"
 foreach($obj32 in $InstalledSoftware32){
      $name32 = $obj32.GetValue('DisplayName')
-     if ($name32 -like "*McAfee*") {
+     iif ($name32 -like "*McAfee*") {
          $mcafeeinstalled = "true"
      }
 }
 
-if ($mcafeeinstalled -eq "true") {
+iif ($mcafeeinstalled -eq "true") {
     Write-Host "McAfee detected"
     #Remove McAfee bloat
 ##McAfee
@@ -2127,7 +2132,7 @@ $InstalledPrograms | ForEach-Object {
     $uninstallcommand = $_.String
 
     Try {
-        if ($uninstallcommand -match "^msiexec*") {
+        iif ($uninstallcommand -match "^msiexec*") {
             #Remove msiexec as we need to split for the uninstall
             $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
             $uninstallcommand = $uninstallcommand + " /quiet /norestart"
@@ -2151,7 +2156,7 @@ $InstalledPrograms | ForEach-Object {
 $safeconnects = Get-ChildItem -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object { $_.DisplayName -match "McAfee Safe Connect" } | Select-Object -Property UninstallString
  
 ForEach ($sc in $safeconnects) {
-    If ($sc.UninstallString) {
+    Iif ($sc.UninstallString) {
         cmd.exe /c $sc.UninstallString /quiet /norestart
     }
 }
@@ -2169,13 +2174,13 @@ $userprofiles = Get-ChildItem $userpath | ForEach-Object { Get-ItemProperty $_.P
 
 $nonAdminLoggedOn = $false
 foreach ($user in $userprofiles) {
-    if ($user.PSChildName -ne '.DEFAULT' -and $user.PSChildName -ne 'S-1-5-18' -and $user.PSChildName -ne 'S-1-5-19' -and $user.PSChildName -ne 'S-1-5-20' -and $user.PSChildName -notmatch 'S-1-5-21-\d+-\d+-\d+-500') {
+    iif ($user.PSChildName -ne '.DEFAULT' -and $user.PSChildName -ne 'S-1-5-18' -and $user.PSChildName -ne 'S-1-5-19' -and $user.PSChildName -ne 'S-1-5-20' -and $user.PSChildName -notmatch 'S-1-5-21-\d+-\d+-\d+-500') {
         $nonAdminLoggedOn = $true
         break
     }
 }
 
-if ($intunecomplete -eq 0 -and $nonAdminLoggedOn) {
+iif ($intunecomplete -eq 0 -and $nonAdminLoggedOn) {
 
 
 ##Apps to ignore - NOTE: Chrome has an unusual uninstall so sort on it's own
@@ -2195,13 +2200,13 @@ $whitelistapps = @(
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 foreach($obj in $InstalledSoftware){
     $name = $obj.GetValue('DisplayName')
-    if ($null -eq $name) {
+    iif ($null -eq $name) {
         $name = $obj.GetValue('DisplayName_Localized')
     }
      if (($whitelistapps -notcontains $name) -and ($null -ne $obj.GetValue('UninstallString'))) {
         $uninstallcommand = $obj.GetValue('UninstallString')
         write-host "Uninstalling $name"
-        if ($uninstallcommand -like "*msiexec*") {
+        iif ($uninstallcommand -like "*msiexec*") {
         $splitcommand = $uninstallcommand.Split("{")
         $msicode = $splitcommand[1]
         $uninstallapp = "msiexec.exe /X {$msicode /qn"
@@ -2224,7 +2229,7 @@ foreach($obj32 in $InstalledSoftware32){
      if (($whitelistapps -notcontains $name32) -and ($null -ne $obj32.GetValue('UninstallString'))) {
         $uninstallcommand32 = $obj.GetValue('UninstallString')
         write-host "Uninstalling $name"
-                if ($uninstallcommand32 -like "*msiexec*") {
+                iif ($uninstallcommand32 -like "*msiexec*") {
         $splitcommand = $uninstallcommand32.Split("{")
         $msicode = $splitcommand[1]
         $uninstallapp = "msiexec.exe /X {$msicode /qn"
@@ -2242,7 +2247,7 @@ foreach($obj32 in $InstalledSoftware32){
 ##Remove Chrome
 $chrome32path = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome"
 
-if ($null -ne $chrome32path) {
+iif ($null -ne $chrome32path) {
 
 $versions = (Get-ItemProperty -path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome').version
 ForEach ($version in $versions) {
@@ -2256,7 +2261,7 @@ Start-Process "$directory\Google\Chrome\Application\$version\Installer\setup.exe
 
 $chromepath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome"
 
-if ($null -ne $chromepath) {
+iif ($null -ne $chromepath) {
 
 $versions = (Get-ItemProperty -path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome').version
 ForEach ($version in $versions) {
