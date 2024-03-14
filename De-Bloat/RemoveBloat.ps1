@@ -1211,6 +1211,7 @@ if ($manufacturer -like "*HP*") {
 	    "HP Notifications"
 	    "HP Security Update Service"
 	    "HP System Default Settings"
+	    "*Wolf*"
 	    "HP Wolf Security"
 	    "HP Wolf Security Application Support for Sure Sense"
 	    "HP Wolf Security Application Support for Windows"
