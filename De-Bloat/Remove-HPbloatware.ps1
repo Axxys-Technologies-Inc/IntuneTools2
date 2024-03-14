@@ -45,24 +45,16 @@ $UninstallPackages = @(
 
 # List of programs to uninstall
 $UninstallPrograms = @(
+    "*HP Wolf*"
+    "*HP Security*"
     "HP Device Access Manager"
     "HP Client Security Manager"
     "HP Connection Optimizer"
     "HP Documentation"
     "HP MAC Address Manager"
     "HP Notifications"
-    "HP System Info HSA Service"
-    "HP Security Update Service"
-    "HP System Default Settings"
-    "HP Sure Click"
-    "HP Sure Click Security Browser"
-    "HP Sure Run"
-    "HP Sure Run Module"
-    "HP Sure Recover"
-    "HP Sure Sense"
-    "HP Sure Sense Installer"
-	"*HP Wolf*"
-	"*HP Security*"
+    "*HP Sure*"
+
 )
 
 $HPidentifier = "AD2F1837"
