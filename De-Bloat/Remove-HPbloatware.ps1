@@ -109,7 +109,7 @@ $InstalledPrograms | ForEach-Object {
     Try {
       $product = Get-WmiObject win32_product | where { $_.name -like "$($_.Name)" }
       if ($_ -ne $null) {
-        msiexec /x $product.IdentifyingNumber /quiet /noreboot
+        msiexec /x $product.IdentifyingNumber /qn /norestart
       }
       else { Write-Warning -Message "Can't find MSI package: [$($_.Name)]" }
     }
