@@ -88,7 +88,7 @@ param (
     [string[]]$customwhitelist
 )
 
-$customwhitelist ='*Adobe Acrobat*,*Automate*,*Chrome*,*ConnectWise*,*Duo*,*LogMeIn*,*Microsoft .NET *,*Microsoft Visual*,*Microsoft Windows Desktop Runtime*,*MySQL Connector*,*ScreenConnect*,*Teams*,*Zoom*,Adobe Refresh Manager,BCR Plug-in,Cisco Jabber,Citrix Authentication Manager,Citrix Web Helper,Citrix Workspace 2311,Citrix Workspace Inside,Citrix Workspace(DV),Citrix Workspace(USB),CYRISMA Sensor version 2.5,Halcyon AR,HP Performance Advisor,HP Performance Advisor,Microsoft Edge,Microsoft Edge Update,Microsoft Edge WebView2 Runtime,Microsoft Intune Management Extension,Microsoft OneDrive,Microsoft Update Health Tools,MTOP Client,Online Plug-in,Self-service Plug-in,Stamps.com'
+$customwhitelist ='*Adobe Acrobat*,*Automate*,*Chrome*,*ConnectWise*,*Duo*,*LogMeIn*,*Microsoft .NET *,*Microsoft Visual*,*Microsoft Windows Desktop Runtime*,*MySQL Connector*,*ScreenConnect*,*Teams*,*Zoom*,Adobe Refresh Manager,BCR Plug-in,Cisco Jabber,Citrix Authentication Manager,Citrix Web Helper,Citrix Workspace 2311,Citrix Workspace Inside,Citrix Workspace(DV),Citrix Workspace(USB),CYRISMA Sensor version 2.5,Halcyon AR,HP Performance Advisor,HP Performance Advisor,Microsoft Edge,Microsoft Edge Update,Microsoft Edge WebView2 Runtime,*Microsoft Intune*,*OneDrive*,MTOP Client,Online Plug-in,Self-service Plug-in,Stamps.com'
 
 ##Elevate if needed
 
