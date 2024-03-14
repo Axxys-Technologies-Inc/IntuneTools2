@@ -1208,6 +1208,9 @@ if ($manufacturer -like "*HP*") {
 
 ##HP Specific
 $UninstallPrograms = @(
+    *HP wolf*
+    *hp doc*
+    *HP Security*
     "HP Client Security Manager"
     "HP Notifications"
     "HP Security Update Service"
