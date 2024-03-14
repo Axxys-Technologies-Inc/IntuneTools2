@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 .Removes bloat from a fresh Windows build
 .DESCRIPTION
@@ -1183,6 +1183,504 @@ invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public
 }
 Write-Host "Removed HP bloat"
 }
+
+f ($manufacturer -like "*HP*") {
+    Write-Host "HP detected"
+    #Remove HP bloat
+
+
+##HP Specific
+$UninstallPrograms = @(
+    "HP Client Security Manager"
+    "HP Notifications"
+    "HP Security Update Service"
+    "HP System Default Settings"
+    "HP Wolf Security"
+    "HP Wolf Security Application Support for Sure Sense"
+    "HP Wolf Security Application Support for Windows"
+    "AD2F1837.HPPCHardwareDiagnosticsWindows"
+    "AD2F1837.HPPowerManager"
+    "AD2F1837.HPPrivacySettings"
+    "AD2F1837.HPQuickDrop"
+    "AD2F1837.HPSupportAssistant"
+    "AD2F1837.HPSystemInformation"
+    "AD2F1837.myHP"
+    "RealtekSemiconductorCorp.HPAudioControl",
+    "HP Sure Recover",
+    "HP Sure Run Module"
+    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
+)
+
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+        $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
+    }
+
+    $WhitelistedApps = @(
+)
+
+##Add custom whitelist apps
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+    foreach ($customwhitelistapp in $customwhitelistapps) {
+        $WhitelistedApps += $customwhitelistapp
+    }        
+    }
+
+$HPidentifier = "AD2F1837"
+
+$InstalledPackages = Get-AppxPackage -AllUsers | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$ProvisionedPackages = Get-AppxProvisionedPackage -Online | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$InstalledPrograms = $allstring | Where-Object {$UninstallPrograms -contains $_.Name}
+
+# Remove provisioned packages first
+ForEach ($ProvPackage in $ProvisionedPackages) {
+
+    Write-Host -Object "Attempting to remove provisioned package: [$($ProvPackage.DisplayName)]..."
+
+    Try {
+        $Null = Remove-AppxProvisionedPackage -PackageName $ProvPackage.PackageName -Online -ErrorAction Stop
+        Write-Host -Object "Successfully removed provisioned package: [$($ProvPackage.DisplayName)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove provisioned package: [$($ProvPackage.DisplayName)]"}
+}
+
+# Remove appx packages
+ForEach ($AppxPackage in $InstalledPackages) {
+                                            
+    Write-Host -Object "Attempting to remove Appx package: [$($AppxPackage.Name)]..."
+
+    Try {
+        $Null = Remove-AppxPackage -Package $AppxPackage.PackageFullName -AllUsers -ErrorAction Stop
+        Write-Host -Object "Successfully removed Appx package: [$($AppxPackage.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove Appx package: [$($AppxPackage.Name)]"}
+}
+
+# Remove installed programs
+$InstalledPrograms | ForEach-Object {
+
+    Write-Host -Object "Attempting to uninstall: [$($_.Name)]..."
+    $uninstallcommand = $_.String
+
+    Try {
+        if ($uninstallcommand -match "^msiexec*") {
+            #Remove msiexec as we need to split for the uninstall
+            $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
+            #Uninstall with string2 params
+            Start-Process 'msiexec.exe' -ArgumentList $uninstallcommand -NoNewWindow -Wait
+            }
+            else {
+            #Exe installer, run straight path
+            $string2 = $uninstallcommand
+            start-process $string2
+            }
+        #$A = Start-Process -FilePath $uninstallcommand -Wait -passthru -NoNewWindow;$a.ExitCode
+        #$Null = $_ | Uninstall-Package -AllVersions -Force -ErrorAction Stop
+        Write-Host -Object "Successfully uninstalled: [$($_.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to uninstall: [$($_.Name)]"}
+
+
+}
+
+##Belt and braces, remove via CIM too
+foreach ($program in $UninstallPrograms) {
+Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
+}
+
+
+#Remove HP Documentation if it exists
+if (test-path -Path "C:\Program Files\HP\Documentation\Doc_uninstall.cmd") {
+$A = Start-Process -FilePath "C:\Program Files\HP\Documentation\Doc_uninstall.cmd" -Wait -passthru -NoNewWindow
+}
+
+##Remove HP Connect Optimizer if setup.exe exists
+if (test-path -Path 'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe') {
+invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public/main/De-Bloat/HPConnOpt.iss" -outfile "C:\Windows\Temp\HPConnOpt.iss"
+
+&'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe' @('-s', '-f1C:\Windows\Temp\HPConnOpt.iss')
+}
+Write-Host "Removed HP bloat"
+}
+
+f ($manufacturer -like "*HP*") {
+    Write-Host "HP detected"
+    #Remove HP bloat
+
+
+##HP Specific
+$UninstallPrograms = @(
+    "HP Client Security Manager"
+    "HP Notifications"
+    "HP Security Update Service"
+    "HP System Default Settings"
+    "HP Wolf Security"
+    "HP Wolf Security Application Support for Sure Sense"
+    "HP Wolf Security Application Support for Windows"
+    "AD2F1837.HPPCHardwareDiagnosticsWindows"
+    "AD2F1837.HPPowerManager"
+    "AD2F1837.HPPrivacySettings"
+    "AD2F1837.HPQuickDrop"
+    "AD2F1837.HPSupportAssistant"
+    "AD2F1837.HPSystemInformation"
+    "AD2F1837.myHP"
+    "RealtekSemiconductorCorp.HPAudioControl",
+    "HP Sure Recover",
+    "HP Sure Run Module"
+    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
+)
+
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+        $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
+    }
+
+    $WhitelistedApps = @(
+)
+
+##Add custom whitelist apps
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+    foreach ($customwhitelistapp in $customwhitelistapps) {
+        $WhitelistedApps += $customwhitelistapp
+    }        
+    }
+
+$HPidentifier = "AD2F1837"
+
+$InstalledPackages = Get-AppxPackage -AllUsers | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$ProvisionedPackages = Get-AppxProvisionedPackage -Online | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$InstalledPrograms = $allstring | Where-Object {$UninstallPrograms -contains $_.Name}
+
+# Remove provisioned packages first
+ForEach ($ProvPackage in $ProvisionedPackages) {
+
+    Write-Host -Object "Attempting to remove provisioned package: [$($ProvPackage.DisplayName)]..."
+
+    Try {
+        $Null = Remove-AppxProvisionedPackage -PackageName $ProvPackage.PackageName -Online -ErrorAction Stop
+        Write-Host -Object "Successfully removed provisioned package: [$($ProvPackage.DisplayName)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove provisioned package: [$($ProvPackage.DisplayName)]"}
+}
+
+# Remove appx packages
+ForEach ($AppxPackage in $InstalledPackages) {
+                                            
+    Write-Host -Object "Attempting to remove Appx package: [$($AppxPackage.Name)]..."
+
+    Try {
+        $Null = Remove-AppxPackage -Package $AppxPackage.PackageFullName -AllUsers -ErrorAction Stop
+        Write-Host -Object "Successfully removed Appx package: [$($AppxPackage.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove Appx package: [$($AppxPackage.Name)]"}
+}
+
+# Remove installed programs
+$InstalledPrograms | ForEach-Object {
+
+    Write-Host -Object "Attempting to uninstall: [$($_.Name)]..."
+    $uninstallcommand = $_.String
+
+    Try {
+        if ($uninstallcommand -match "^msiexec*") {
+            #Remove msiexec as we need to split for the uninstall
+            $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
+            #Uninstall with string2 params
+            Start-Process 'msiexec.exe' -ArgumentList $uninstallcommand -NoNewWindow -Wait
+            }
+            else {
+            #Exe installer, run straight path
+            $string2 = $uninstallcommand
+            start-process $string2
+            }
+        #$A = Start-Process -FilePath $uninstallcommand -Wait -passthru -NoNewWindow;$a.ExitCode
+        #$Null = $_ | Uninstall-Package -AllVersions -Force -ErrorAction Stop
+        Write-Host -Object "Successfully uninstalled: [$($_.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to uninstall: [$($_.Name)]"}
+
+
+}
+
+##Belt and braces, remove via CIM too
+foreach ($program in $UninstallPrograms) {
+Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
+}
+
+
+#Remove HP Documentation if it exists
+if (test-path -Path "C:\Program Files\HP\Documentation\Doc_uninstall.cmd") {
+$A = Start-Process -FilePath "C:\Program Files\HP\Documentation\Doc_uninstall.cmd" -Wait -passthru -NoNewWindow
+}
+
+##Remove HP Connect Optimizer if setup.exe exists
+if (test-path -Path 'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe') {
+invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public/main/De-Bloat/HPConnOpt.iss" -outfile "C:\Windows\Temp\HPConnOpt.iss"
+
+&'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe' @('-s', '-f1C:\Windows\Temp\HPConnOpt.iss')
+}
+Write-Host "Removed HP bloat"
+}
+
+f ($manufacturer -like "*HP*") {
+    Write-Host "HP detected"
+    #Remove HP bloat
+
+
+##HP Specific
+$UninstallPrograms = @(
+    "HP Client Security Manager"
+    "HP Notifications"
+    "HP Security Update Service"
+    "HP System Default Settings"
+    "HP Wolf Security"
+    "HP Wolf Security Application Support for Sure Sense"
+    "HP Wolf Security Application Support for Windows"
+    "AD2F1837.HPPCHardwareDiagnosticsWindows"
+    "AD2F1837.HPPowerManager"
+    "AD2F1837.HPPrivacySettings"
+    "AD2F1837.HPQuickDrop"
+    "AD2F1837.HPSupportAssistant"
+    "AD2F1837.HPSystemInformation"
+    "AD2F1837.myHP"
+    "RealtekSemiconductorCorp.HPAudioControl",
+    "HP Sure Recover",
+    "HP Sure Run Module"
+    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
+)
+
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+        $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
+    }
+
+    $WhitelistedApps = @(
+)
+
+##Add custom whitelist apps
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+    foreach ($customwhitelistapp in $customwhitelistapps) {
+        $WhitelistedApps += $customwhitelistapp
+    }        
+    }
+
+$HPidentifier = "AD2F1837"
+
+$InstalledPackages = Get-AppxPackage -AllUsers | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$ProvisionedPackages = Get-AppxProvisionedPackage -Online | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$InstalledPrograms = $allstring | Where-Object {$UninstallPrograms -contains $_.Name}
+
+# Remove provisioned packages first
+ForEach ($ProvPackage in $ProvisionedPackages) {
+
+    Write-Host -Object "Attempting to remove provisioned package: [$($ProvPackage.DisplayName)]..."
+
+    Try {
+        $Null = Remove-AppxProvisionedPackage -PackageName $ProvPackage.PackageName -Online -ErrorAction Stop
+        Write-Host -Object "Successfully removed provisioned package: [$($ProvPackage.DisplayName)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove provisioned package: [$($ProvPackage.DisplayName)]"}
+}
+
+# Remove appx packages
+ForEach ($AppxPackage in $InstalledPackages) {
+                                            
+    Write-Host -Object "Attempting to remove Appx package: [$($AppxPackage.Name)]..."
+
+    Try {
+        $Null = Remove-AppxPackage -Package $AppxPackage.PackageFullName -AllUsers -ErrorAction Stop
+        Write-Host -Object "Successfully removed Appx package: [$($AppxPackage.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove Appx package: [$($AppxPackage.Name)]"}
+}
+
+# Remove installed programs
+$InstalledPrograms | ForEach-Object {
+
+    Write-Host -Object "Attempting to uninstall: [$($_.Name)]..."
+    $uninstallcommand = $_.String
+
+    Try {
+        if ($uninstallcommand -match "^msiexec*") {
+            #Remove msiexec as we need to split for the uninstall
+            $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
+            #Uninstall with string2 params
+            Start-Process 'msiexec.exe' -ArgumentList $uninstallcommand -NoNewWindow -Wait
+            }
+            else {
+            #Exe installer, run straight path
+            $string2 = $uninstallcommand
+            start-process $string2
+            }
+        #$A = Start-Process -FilePath $uninstallcommand -Wait -passthru -NoNewWindow;$a.ExitCode
+        #$Null = $_ | Uninstall-Package -AllVersions -Force -ErrorAction Stop
+        Write-Host -Object "Successfully uninstalled: [$($_.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to uninstall: [$($_.Name)]"}
+
+
+}
+
+##Belt and braces, remove via CIM too
+foreach ($program in $UninstallPrograms) {
+Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
+}
+
+
+#Remove HP Documentation if it exists
+if (test-path -Path "C:\Program Files\HP\Documentation\Doc_uninstall.cmd") {
+$A = Start-Process -FilePath "C:\Program Files\HP\Documentation\Doc_uninstall.cmd" -Wait -passthru -NoNewWindow
+}
+
+##Remove HP Connect Optimizer if setup.exe exists
+if (test-path -Path 'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe') {
+invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public/main/De-Bloat/HPConnOpt.iss" -outfile "C:\Windows\Temp\HPConnOpt.iss"
+
+&'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe' @('-s', '-f1C:\Windows\Temp\HPConnOpt.iss')
+}
+Write-Host "Removed HP bloat"
+}
+
+f ($manufacturer -like "*HP*") {
+    Write-Host "HP detected"
+    #Remove HP bloat
+
+
+##HP Specific
+$UninstallPrograms = @(
+    "HP Client Security Manager"
+    "HP Notifications"
+    "HP Security Update Service"
+    "HP System Default Settings"
+    "HP Wolf Security"
+    "HP Wolf Security Application Support for Sure Sense"
+    "HP Wolf Security Application Support for Windows"
+    "AD2F1837.HPPCHardwareDiagnosticsWindows"
+    "AD2F1837.HPPowerManager"
+    "AD2F1837.HPPrivacySettings"
+    "AD2F1837.HPQuickDrop"
+    "AD2F1837.HPSupportAssistant"
+    "AD2F1837.HPSystemInformation"
+    "AD2F1837.myHP"
+    "RealtekSemiconductorCorp.HPAudioControl",
+    "HP Sure Recover",
+    "HP Sure Run Module"
+    "RealtekSemiconductorCorp.HPAudioControl_2.39.280.0_x64__dt26b99r8h8gj"
+)
+
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+        $UninstallPrograms = $UninstallPrograms | Where-Object { $customWhitelistApps -notcontains $_ }
+    }
+
+    $WhitelistedApps = @(
+)
+
+##Add custom whitelist apps
+    ##If custom whitelist specified, remove from array
+    if ($customwhitelist) {
+        $customWhitelistApps = $customwhitelist -split ","
+    foreach ($customwhitelistapp in $customwhitelistapps) {
+        $WhitelistedApps += $customwhitelistapp
+    }        
+    }
+
+$HPidentifier = "AD2F1837"
+
+$InstalledPackages = Get-AppxPackage -AllUsers | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$ProvisionedPackages = Get-AppxProvisionedPackage -Online | Where-Object {(($UninstallPackages -contains $_.Name) -or ($_.Name -match "^$HPidentifier"))-and ($_.Name -NotMatch $WhitelistedApps)}
+
+$InstalledPrograms = $allstring | Where-Object {$UninstallPrograms -contains $_.Name}
+
+# Remove provisioned packages first
+ForEach ($ProvPackage in $ProvisionedPackages) {
+
+    Write-Host -Object "Attempting to remove provisioned package: [$($ProvPackage.DisplayName)]..."
+
+    Try {
+        $Null = Remove-AppxProvisionedPackage -PackageName $ProvPackage.PackageName -Online -ErrorAction Stop
+        Write-Host -Object "Successfully removed provisioned package: [$($ProvPackage.DisplayName)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove provisioned package: [$($ProvPackage.DisplayName)]"}
+}
+
+# Remove appx packages
+ForEach ($AppxPackage in $InstalledPackages) {
+                                            
+    Write-Host -Object "Attempting to remove Appx package: [$($AppxPackage.Name)]..."
+
+    Try {
+        $Null = Remove-AppxPackage -Package $AppxPackage.PackageFullName -AllUsers -ErrorAction Stop
+        Write-Host -Object "Successfully removed Appx package: [$($AppxPackage.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to remove Appx package: [$($AppxPackage.Name)]"}
+}
+
+# Remove installed programs
+$InstalledPrograms | ForEach-Object {
+
+    Write-Host -Object "Attempting to uninstall: [$($_.Name)]..."
+    $uninstallcommand = $_.String
+
+    Try {
+        if ($uninstallcommand -match "^msiexec*") {
+            #Remove msiexec as we need to split for the uninstall
+            $uninstallcommand = $uninstallcommand -replace "msiexec.exe", ""
+            #Uninstall with string2 params
+            Start-Process 'msiexec.exe' -ArgumentList $uninstallcommand -NoNewWindow -Wait
+            }
+            else {
+            #Exe installer, run straight path
+            $string2 = $uninstallcommand
+            start-process $string2
+            }
+        #$A = Start-Process -FilePath $uninstallcommand -Wait -passthru -NoNewWindow;$a.ExitCode
+        #$Null = $_ | Uninstall-Package -AllVersions -Force -ErrorAction Stop
+        Write-Host -Object "Successfully uninstalled: [$($_.Name)]"
+    }
+    Catch {Write-Warning -Message "Failed to uninstall: [$($_.Name)]"}
+
+
+}
+
+##Belt and braces, remove via CIM too
+foreach ($program in $UninstallPrograms) {
+Get-CimInstance -Classname Win32_Product | Where-Object Name -Match $program | Invoke-CimMethod -MethodName UnInstall
+}
+
+
+#Remove HP Documentation if it exists
+if (test-path -Path "C:\Program Files\HP\Documentation\Doc_uninstall.cmd") {
+$A = Start-Process -FilePath "C:\Program Files\HP\Documentation\Doc_uninstall.cmd" -Wait -passthru -NoNewWindow
+}
+
+##Remove HP Connect Optimizer if setup.exe exists
+if (test-path -Path 'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe') {
+invoke-webrequest -uri "https://raw.githubusercontent.com/andrew-s-taylor/public/main/De-Bloat/HPConnOpt.iss" -outfile "C:\Windows\Temp\HPConnOpt.iss"
+
+&'C:\Program Files (x86)\InstallShield Installation Information\{6468C4A5-E47E-405F-B675-A70A70983EA6}\setup.exe' @('-s', '-f1C:\Windows\Temp\HPConnOpt.iss')
+}
+Write-Host "Removed HP bloat"
+}
+
+
 
 
 
